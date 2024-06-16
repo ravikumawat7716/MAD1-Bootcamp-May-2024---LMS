@@ -14,7 +14,7 @@ class User(db.Model):
     username = db.Column(db.String(128),unique = True,nullable = False)
     password=db.Column(db.String(128), nullable = False)
     books = db.relationship('Book', secondary='mybooks', backref='users')
-    is_admin=db.Column(db.Boolean,nullable= False, default= False)
+    role = db.Column(db.String(64),nullable= False, default= False)
 
    
 
