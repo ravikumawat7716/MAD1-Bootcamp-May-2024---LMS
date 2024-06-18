@@ -7,6 +7,23 @@
     </head>
     <body>
         <h1>User Registration Page</h1>
+        <form action="/register" method="post">
+            <div>
+                <label>Name : </label>
+                <input type="text" name="name" required=True>
+            </div>
+            <div>
+                <label>Email : </label>
+                <input type="email" name="email" required=True>
+            </div>
+            <div>
+                <label>Password : </label>
+                <input type="password" name="password" required=True>
+            </div>
+            <div>
+                <input type="submit" name="login">
+            </div>
+        </form>
     </body>
 
 </html>
