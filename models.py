@@ -1,9 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(db.Model , UserMixin):
     __tablename__="user"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
@@ -12,11 +13,14 @@ class User(db.Model):
     role = db.Column(db.String(128), nullable=False)
     date_created = db.Column(db.DateTime , nullable=False , default=datetime.now())
 
-# class Section(db.Model):
-#     __tablename__="section"
-#     id=db.Column(db.Integer,primary_key = True)
-#     name = db.Column(db.String(64),nullable =False)
-#     date_created=db.Column(db.DateTime, nullable = False,default= datetime.now())
+    def get_id(self):
+        return self.id
+
+class Section(db.Model):
+    __tablename__="section"
+    id=db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String(64),nullable =False)
+    date_created=db.Column(db.DateTime, nullable = False,default= datetime.now())
 #     ebooks = db.relationship("Book", backref = "section", lazy = True)
 
 # class Book(db.Model):
