@@ -4,28 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td {
+            vertical-align: top;
+        }
+        form {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
-    <h1> Admin Dashboard</h1>
+    <h1>Admin Dashboard</h1>
     <div>
-        <a href="/section">+ Add New Section </a>
+        <a href="/section">+ Add New Section</a>
     </div>
     <div>
         sections will be listed here.
     </div>
-    <div>
-        <ul>
-        {%for section in sections%}
-        <li>
-            {{section.name}}
-            <form action="{{ url_for('delete_section', section_id=section.id) }}" method="post" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-            <a href={{url_for('update_section' , section_id = section.id)}}> Update </a>
-        </li>
+    <table>
+        <tr>
+            <th>Section Name</th>
+            <th>Actions</th>
+        </tr>
+        {% for section in sections %}
+        <tr>
+            <td>{{ section.name }}</td>
+            <td>
+                <form action="{{ url_for('delete_section', section_id=section.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <a href="{{ url_for('update_section', section_id=section.id) }}">Update</a>
+            </td>
+        </tr>
         {% endfor %}
-        </ul>
-    </div>
-    
+    </table>
 </body>
 </html>

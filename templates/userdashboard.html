@@ -4,7 +4,25 @@
     </head>
     <body>
         <h3>Hello {{ name }} </h3>
-        <p> Your password is correct. </p>
+
+        <form action="/search" method="post">
+            <div>
+                <label>Search : </label>
+                <input type="text" name="query" required=True>
+            </div>
+            <div>
+                <input type="submit" name="search">
+            </div>
+        </form>
+
+        <ul>
+        {% for section in sections %}
+        <li>
+            <td>{{ section.name }}</td>
+        </li>
+        {% endfor %}
+    </ul>
+    
         
     </body>
 </html>

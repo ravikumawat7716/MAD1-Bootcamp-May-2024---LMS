@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import UserMixin
+# from whoosh.analysis import StemmingAnalyzer
 
 db = SQLAlchemy()
 
@@ -18,6 +19,8 @@ class User(db.Model , UserMixin):
 
 class Section(db.Model):
     __tablename__="section"
+    # __searchable__ = ['name']
+    # __analyzer__ = StemmingAnalyzer()
     id=db.Column(db.Integer,primary_key = True)
     name = db.Column(db.String(64),nullable =False)
     date_created=db.Column(db.DateTime, nullable = False,default= datetime.now())

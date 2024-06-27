@@ -2,8 +2,14 @@ from flask import Flask, render_template, redirect, url_for, request , session ,
 from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_login import LoginManager , login_user , current_user , logout_user , UserMixin, login_required
-
 from models import db, User , Section
+from whoosh.analysis import StemmingAnalyzer
+import flask_whooshalchemy
+
+
+
+
+
 
 app = Flask(__name__)
 
@@ -11,12 +17,15 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'somesecretkey'
+app.config['WHOOSH_BASE'] = 'whoosh'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db.init_app(app)
+
+# whooshalchemy.whoosh_index(app, Section)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -75,8 +84,9 @@ def userdashboard():
     # print(session)
     print(current_user.id)
     cu = User.query.filter_by(id = current_user.id).first()
+    sections = Section.query.all()
     name = cu.name
-    return f'Hello { name }'
+    return render_template('userdashboard.html' , name=name , sections = sections)
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
@@ -146,6 +156,34 @@ def update_section(section_id):
 # @app.route('/sections')
 # def get_all_sections():
 #     return "all the books"
+
+
+@app.route('/search' , methods=['POST'])
+def search():
+    if request.method == "POST":
+        search_query = request.form['query']
+        sections = Section.query.filter(Section.name.contains(search_query) | Section.id.contains(search_query)).all()
+        cu = User.query.filter_by(id = current_user.id).first()
+        name = cu.name
+        return render_template('userdashboard.html', sections = sections , name = name)
+    
+@app.route('/search2' , methods=["POST"])
+def search2():
+        if request.method == "POST":
+            search_query = request.form['query']
+            sections = Section.query.whoosh_search(search_query).all()
+            cu = User.query.filter_by(id = current_user.id).first()
+            name = cu.name
+        return render_template('userdashboard.html', sections = sections , name = name)
+
+    
+
+    
+
+
+
+
+
 
 if __name__ == '__main__':
     if not os.path.exists('instance/mydatabase.db'):
